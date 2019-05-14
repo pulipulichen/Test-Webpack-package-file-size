@@ -11,27 +11,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const CompressionPlugin = require('compression-webpack-plugin')
 const BrotliPlugin = require('brotli-webpack-plugin')
 
-/**
- * 列出檔案清單
- * @author Pulipuli Chen 20190303
- **/
-function getFilelist (dir) {
-  let filelist = glob.sync(path.join(dir, '**/*.css'))
-      .concat(glob.sync(path.join(dir, '**/*.js')))
-      .concat(glob.sync(path.join(dir, '**/*.less')))
-      .filter((file) => {
-        return (!file.endsWith('entry.js') 
-          && !file.endsWith('.mocha-test.js')
-          && !file.endsWith('.mocha-test-skip.js')
-          && !file.endsWith('.selenium-test.js')
-          && !file.endsWith('.selenium-test-skip.js')
-          && (file.indexOf('/tmp/') === -1)
-          && (file.indexOf('/ignore/') === -1))
-      })
-      .map(item => './' + item)
-  return filelist
-}
-
 let webpackConfig  = {
   //cache: true,
   devtool: 'source-map',
