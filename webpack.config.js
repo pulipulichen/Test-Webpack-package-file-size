@@ -35,6 +35,9 @@ let webpackConfig  = {
   entry: {
     'import-from-file': './src/import-from-file.js',
     'import-from-module': './src/import-from-module.js',
+    'require-from-file': './src/require-from-file.js',
+    'require-from-module': './src/require-from-module.js',
+    
   },
   output: {
     path: path.resolve('./dist'),
