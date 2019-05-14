@@ -7,6 +7,9 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const WebpackShellPlugin = require('webpack-shell-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const CompressionPlugin = require('compression-webpack-plugin')
+const BrotliPlugin = require('brotli-webpack-plugin')
 
 /**
  * 列出檔案清單
@@ -76,9 +79,26 @@ let webpackConfig  = {
         ]
       },
     ]
-  }
+  },  // module: {
+  /*
+  optimization: {
+    splitChunks: {
+			cacheGroups: {
+				commons: {
+					test: /[\\/]node_modules[\\/]/,
+					name: 'vendors',
+					chunks: 'all'
+				}
+			}
+		}
+  },
+  */
+  plugins: [
+    new BundleAnalyzerPlugin()
+  ]
 }
 
+// -----------------------------
 
 module.exports = (env, argv) => {
   
@@ -115,19 +135,21 @@ module.exports = (env, argv) => {
         }
       }
     })
-    webpackConfig.optimization = {
-      minimizer: [
-        new UglifyJsPlugin({
-          cache: true,
-          parallel: true,
-          sourceMap: true // set to true if you want JS source maps
-        })
-      ]
+    
+    if (typeof(webpackConfig.optimization) !== 'object') {
+      webpackConfig.optimization = {}
     }
-  }
-  if (argv.mode === 'development') {
-
-  }
+    
+    webpackConfig.optimization.minimizer = [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: false // set to true if you want JS source maps
+      })
+    ]
+  } // if (argv.mode === 'production') {
+  
+  
 
   return webpackConfig
 }
